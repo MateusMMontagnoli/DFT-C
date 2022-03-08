@@ -36,7 +36,9 @@ int main(int argc, char *argv[])
                 y[l] = temp;
                 l++;
             }
-            //printf("%d",tam);
+            
+            
+            // Pre-Processing Signal
             double soma_amplitude_dom_tempo = 0;
             for (i = 0; i < tam; i++)
             {
@@ -51,6 +53,8 @@ int main(int argc, char *argv[])
             {
                 y[i] = y[i] - 0.95*y[i+1];
             }
+            
+            // Creating a txt file for DFT data
             char arquivo_nome[100];
             char arquivo_nome_temp[100];
             char arquivo_nome2[100];
@@ -75,7 +79,7 @@ int main(int argc, char *argv[])
             sprintf(arquivo_nome, arquivo_nome2);
 
             FILE *DFT_MOVEL = fopen(arquivo_nome, "w");
-            double H_Movel[2047];
+            double H_Movel[2047]; // Half lenght of DFT
             if(DFT_MOVEL != NULL)
             {
 
@@ -90,17 +94,18 @@ int main(int argc, char *argv[])
                         soma_real += y[k]*cos(angulo);
                         soma_imag += y[k]*sin(angulo);
                     }
-                    H[i] = (sqrt(pow(soma_real/4096,2) + pow(soma_imag/4096,2))) + 1;
-                    H[i] = 20*log10(H[i]);
+                    H[i] = (sqrt(pow(soma_real/4096,2) + pow(soma_imag/4096,2))) + 1; 
+                    H[i] = 20*log10(H[i]); // db
                 }
 
-
+                // Storing half of the DFT data
                 for (i = 0; i < 2048; i++)
                 {
                     fprintf(DFT_MOVEL, "%lf\n", H[i]);
                 }
             }
             num++;
+            // Closing txt file
             fclose(DFT_MOVEL);
             fclose(arquivos);
         }
